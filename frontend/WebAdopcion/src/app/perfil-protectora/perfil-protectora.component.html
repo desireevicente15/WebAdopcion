@@ -1,0 +1,293 @@
+<!-- src/app/perfil-protectora/perfil-protectora.component.html -->
+<div class="profile-container" *ngIf="protectora$ | async as p">
+
+  <!-- 1) CABECERA: foto + nombre + botones -->
+  <div class="profile-header d-flex align-items-center mb-4">
+    <img class="profile-photo me-3" [src]="'/fotoProtectora.png'" [alt]="'Foto de perfil de ' + p.nombre" />
+    <div class="info flex-grow-1">
+      <h1 class="protectora-name">{{ p.nombre }}</h1>
+      <p class="protectora-description">{{ p.descripcion }}</p>
+      <div class="d-flex gap-2">
+        <button class="btn-add-animal" (click)="addAnimal()">
+          <i class="icon-paw"></i> Añadir Animal
+        </button>
+        <button class="btn-delete-account" (click)="onDeleteAccount()">
+          Eliminar cuenta
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2) ROW: columna principal (animales) + sidebar (solicitudes) -->
+  <div class="row gx-4 mt-4">
+
+    <!-- Columna IZQUIERDA: Animales disponibles -->
+    <div class="col-12 col-lg-8">
+      <section class="animales-section">
+        <h2 class="section-title">Animales Disponibles</h2>
+
+        <div *ngIf="p.animales?.length; else sinAnimales" class="row g-3">
+          <div *ngFor="let animal of p.animales; trackBy: trackById" class="col-12 col-md-6 col-lg-6">
+            <div class="animal-card">
+              <!-- MODO LECTURA -->
+              <ng-container *ngIf="editingId !== animal.id; else editForm">
+                <!-- Carrusel si hay >1 foto -->
+                <ng-container *ngIf="animal.fotoUrls?.length > 1; else unaFoto">
+                  <div id="carousel-{{ animal.id }}" class="carousel slide mb-2" data-bs-ride="carousel">
+                    <div class="carousel-inner">
+                      <div *ngFor="let foto of animal.fotoUrls; let idx = index" class="carousel-item"
+                        [class.active]="idx === 0">
+                        <img [src]="foto.url" class="d-block w-100 rounded"
+                          [alt]="animal.nombre + ' imagen ' + (idx + 1)" style="height: 240px; object-fit: cover;" />
+                      </div>
+                    </div>
+                    <button class="carousel-control-prev" type="button" [attr.data-bs-target]="'#carousel-' + animal.id"
+                      data-bs-slide="prev">
+                      <span class="carousel-control-prev-icon"></span>
+                    </button>
+                    <button class="carousel-control-next" type="button" [attr.data-bs-target]="'#carousel-' + animal.id"
+                      data-bs-slide="next">
+                      <span class="carousel-control-next-icon"></span>
+                    </button>
+                  </div>
+                </ng-container>
+
+                <!-- Si solo hay una foto (o ninguna) -->
+                <ng-template #unaFoto>
+                  <img class="w-100 mb-2 rounded"
+                    [src]="animal.fotoUrls?.[0]?.url || animal.fotoUrl || 'assets/no-image.png'" [alt]="animal.nombre"
+                    style="height: 240px; object-fit: cover;" />
+                </ng-template>
+
+                <!-- INFO BÁSICA -->
+                <h3 class="animal-name">{{ animal.nombre }}</h3>
+                <ul class="animal-info-list mb-2">
+                  <li><strong>Especie:</strong> {{ animal.especie | titlecase }}</li>
+                  <li><strong>Sexo:</strong> {{ animal.sexo }}</li>
+                  <li><strong>Tamaño:</strong> {{ animal.tamano }}</li>
+                  <li>
+                    <strong>Nació:</strong> {{ animal.fechaNacimiento | date:'longDate' }}
+                  </li>
+                  <li>
+                    <strong>Ubicación:</strong> {{ animal.comunidadAutonoma }}, {{ animal.provincia }}
+                  </li>
+                  <li><strong>Estilo de vida:</strong> {{ animal.estiloVida }}</li>
+                  <li>
+                    <strong>Con niños/adultos:</strong> {{ animal.niniosYadultos ? 'Sí' : 'No' }}
+                  </li>
+                  <li>
+                    <strong>Otras mascotas:</strong> {{ animal.otrasMascotas ? 'Sí' : 'No' }}
+                  </li>
+                </ul>
+                <p class="animal-description">{{ animal.descripcion }}</p>
+                <div class="animal-tags mb-3">
+                  <span *ngFor="let tag of animal.etiquetas">#{{ tag }}</span>
+                </div>
+
+                <!-- BOTONES ACCIONES -->
+                <div class="card-actions">
+                  <button class="btn-edit" (click)="startEdit(animal)">✏️ Editar</button>
+                  <button class="btn-delete" (click)="onDeleteAnimal(animal.id!)">
+                    🗑️ Eliminar
+                  </button>
+                </div>
+              </ng-container>
+
+              <!-- modo edición inline -->
+              <ng-template #editForm>
+                <div class="mb-2">
+                  <label class="form-label small">Nombre</label>
+                  <input type="text" class="form-control form-control-sm" [(ngModel)]="editCache.nombre" />
+                </div>
+
+                <div class="mb-2">
+                  <label class="form-label small">Descripción</label>
+                  <textarea class="form-control form-control-sm" rows="2"
+                    [(ngModel)]="editCache.descripcion"></textarea>
+                </div>
+
+                <div class="mb-2">
+                  <label class="form-label small">Especie</label>
+                  <select class="form-select form-select-sm" [(ngModel)]="editCache.especie">
+                    <option *ngFor="let e of especies" [value]="e">{{ e | titlecase }}</option>
+                  </select>
+                </div>
+
+                <div class="mb-2">
+                  <label class="form-label small">Sexo</label>
+                  <select class="form-select form-select-sm" [(ngModel)]="editCache.sexo">
+                    <option *ngFor="let s of sexos" [value]="s">{{ s | titlecase }}</option>
+                  </select>
+                </div>
+
+                <div class="mb-2">
+                  <label class="form-label small">Tamaño</label>
+                  <select class="form-select form-select-sm" [(ngModel)]="editCache.tamano">
+                    <option *ngFor="let t of tamanos" [value]="t">{{ t | titlecase }}</option>
+                  </select>
+                </div>
+
+                <div class="mb-2">
+                  <label class="form-label small">Fecha de nacimiento</label>
+                  <input type="date" class="form-control form-control-sm" [(ngModel)]="editCache.fechaNacimiento" />
+                </div>
+
+                <div class="mb-2">
+                  <label class="form-label small">Comunidad Autónoma</label>
+                  <select class="form-select form-select-sm" [(ngModel)]="editCache.comunidadAutonoma"
+                    (change)="onChangeComunidad(editCache.comunidadAutonoma!)">
+                    <option *ngFor="let c of comunidades" [value]="c.nombre">{{ c.nombre }}</option>
+                  </select>
+                </div>
+
+                <div class="mb-2">
+                  <label class="form-label small">Provincia</label>
+                  <select class="form-select form-select-sm" [(ngModel)]="editCache.provincia">
+                    <option *ngFor="let p of provinciasDisponibles" [value]="p">{{ p }}</option>
+                  </select>
+                </div>
+
+                <div class="mb-2">
+                  <label class="form-label small">Estilo de vida</label>
+                  <select class="form-select form-select-sm" [(ngModel)]="editCache.estiloVida">
+                    <option *ngFor="let ev of estilosVida" [value]="ev">{{ ev | titlecase }}</option>
+                  </select>
+                </div>
+
+                <div class="mb-2 form-check">
+                  <input class="form-check-input" type="checkbox" [(ngModel)]="editCache.niniosYadultos" />
+                  <label class="form-check-label small">¿Con niños y adultos?</label>
+                </div>
+
+                <div class="mb-2 form-check">
+                  <input class="form-check-input" type="checkbox" [(ngModel)]="editCache.otrasMascotas" />
+                  <label class="form-check-label small">¿Con otras mascotas?</label>
+                </div>
+
+                <div class="mb-2">
+                  <label class="form-label small">Etiquetas (separadas por coma)</label>
+                  <input type="text" class="form-control form-control-sm" [(ngModel)]="editCache.etiquetasString"
+                    (blur)="onEtiquetasBlur()" />
+                </div>
+
+                <div class="mb-2">
+                  <label class="form-label small">Imágenes</label>
+                  <input type="file" multiple class="form-control form-control-sm" (change)="onFilesSelected($event)"
+                    [disabled]="uploading" />
+                  <div class="mt-2 d-flex flex-wrap">
+                    <div *ngFor="let foto of editCache.fotoUrls; let idx = index" class="me-2 mb-2 position-relative">
+                      <img [src]="foto.url" class="rounded" style="width:60px; height:60px; object-fit:cover;" />
+                      <button type="button" class="btn-close btn-sm position-absolute top-0 end-0 bg-white"
+                        aria-label="Eliminar" (click)="removeImage(idx)"></button>
+                    </div>
+                  </div>
+                  <div *ngIf="uploading" class="small text-primary">Subiendo imágenes...</div>
+                </div>
+
+                <div class="card-actions">
+                  <button class="btn-save" (click)="saveEdit(editingId!)">💾 Guardar</button>
+                  <button class="btn-cancel" (click)="cancelEdit()">✖️ Cancelar</button>
+                </div>
+              </ng-template>
+            </div>
+          </div>
+        </div>
+
+        <ng-template #sinAnimales>
+          <p class="text-muted text-center">
+            Aún no hay animales disponibles. Pulsa “Añadir Animal” para registrar alguno.
+          </p>
+        </ng-template>
+      </section>
+    </div>
+
+    <!-- Columna DERECHA: Sidebar de Solicitudes -->
+    <div class="col-12 col-lg-4">
+      <aside class="solicitudes-sidebar">
+        <!-- 1) Título + Contador -->
+        <div class="header-solicitudes d-flex justify-content-between align-items-center mb-3">
+          <h2 class="section-title mb-0">Solicitudes de Adopción</h2>
+          <span class="contador badge bg-primary">{{ solicitudes.length }}</span>
+        </div>
+
+        <!-- 2) Tabla simplificada: solo “Animal” y “Solicitante” -->
+        <ng-container *ngIf="solicitudes.length > 0; else sinSolicitudes">
+          <div class="table-responsive">
+            <table class="table table-hover table-sm">
+              <thead>
+                <tr>
+                  <th>Animal</th>
+                  <th>Solicitante</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let s of solicitudes" class="fila-solicitud" (click)="openModal(s)">
+                  <td class="align-middle">{{ s.animalNombre }}</td>
+                  <td class="align-middle">{{ s.nombreCompleto }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </ng-container>
+
+        <!-- 3) Mensaje si no hay solicitudes -->
+        <ng-template #sinSolicitudes>
+          <p class="text-muted text-center mb-0">
+            No hay solicitudes de adopción por el momento.
+          </p>
+        </ng-template>
+
+        <!-- 4) Modal de detalles -->
+        <div class="modal fade" id="detalleSolicitudModal" tabindex="-1" aria-labelledby="detalleSolicitudModalLabel"
+          aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 id="detalleSolicitudModalLabel" class="modal-title">
+                  Detalles de la solicitud
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+              </div>
+              <div class="modal-body">
+                <ng-container *ngIf="selectedSolicitud">
+                  <p>
+                    <strong>Fecha:</strong>
+                    {{ selectedSolicitud.fechaSolicitud.toDate() | date:'longDate' }}
+                  </p>
+                  <p>
+                    <strong>Hora:</strong>
+                    {{ selectedSolicitud.fechaSolicitud.toDate() | date:'shortTime' }}
+                  </p>
+                  <p>
+                    <strong>Animal:</strong> {{ selectedSolicitud.animalNombre }}
+                  </p>
+                  <p>
+                    <strong>Solicitante:</strong> {{ selectedSolicitud.nombreCompleto }}
+                  </p>
+                  <p>
+                    <strong>Correo:</strong> {{ selectedSolicitud.correo }}
+                  </p>
+                  <p>
+                    <strong>Teléfono:</strong> {{ selectedSolicitud.telefono }}
+                  </p>
+                  <p>
+                    <strong>Mensaje:</strong>
+                    <ng-container *ngIf="selectedSolicitud.mensaje; else sinMensaje">
+                      {{ selectedSolicitud.mensaje }}
+                    </ng-container>
+                    <ng-template #sinMensaje>—</ng-template>
+                  </p>
+                </ng-container>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                  Cerrar
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- /Modal -->
+
+      </aside>
+    </div> <!-- /col-12 col-lg-4 -->

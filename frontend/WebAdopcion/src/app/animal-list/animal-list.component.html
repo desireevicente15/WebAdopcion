@@ -1,0 +1,270 @@
+<div class="filtros-page">
+  <div class="container my-4">
+    <div class="row gx-4">
+
+      <aside class="col-12 col-md-4 col-lg-3 sidebar-filters p-4">
+        <h2 class="titulo-filtros">Filtros básicos</h2>
+
+        <form [formGroup]="filterForm" (ngSubmit)="onFilter()" class="filters-container mb-4">
+
+          <!-- Especie -->
+          <div class="mb-3">
+            <label for="especie" class="form-label">Especie</label>
+            <select formControlName="especie" id="especie" class="form-select">
+              <option value="">Todas</option>
+              <option *ngFor="let esp of especies" [value]="esp">{{ esp }}</option>
+            </select>
+          </div>
+
+          <!-- Sexo -->
+          <div class="mb-3">
+            <label for="sexo" class="form-label">Sexo</label>
+            <select formControlName="sexo" id="sexo" class="form-select">
+              <option value="">Todos</option>
+              <option *ngFor="let s of sexos" [value]="s">{{ s }}</option>
+            </select>
+          </div>
+
+          <!-- Edad -->
+          <div class="mb-3">
+            <label for="edad" class="form-label">Edad</label>
+            <select formControlName="edad" id="edad" class="form-select">
+              <option value="">Todas</option>
+              <option *ngFor="let e of fechaNacimiento" [value]="e">{{ e }}</option>
+            </select>
+          </div>
+
+          <!-- Tamaño -->
+          <div class="mb-3">
+            <label for="tamano" class="form-label">Tamaño</label>
+            <select formControlName="tamano" id="tamano" class="form-select">
+              <option value="">Todos</option>
+              <option *ngFor="let t of tamanos" [value]="t">{{ t }}</option>
+            </select>
+          </div>
+
+          <!-- Comunidad Autónoma -->
+          <div class="mb-3">
+            <label for="comunidadAutonoma" class="form-label">Comunidad Autónoma</label>
+            <select id="comunidadAutonoma" formControlName="comunidadAutonoma"
+              (change)="onChangeComunidad($any($event.target).value)" class="form-select">
+              <option value="">Todas</option>
+              <option *ngFor="let com of comunidadAutonoma" [value]="com.nombre">
+                {{ com.nombre }}
+              </option>
+            </select>
+          </div>
+
+          <!-- Provincia -->
+          <div class="mb-3">
+            <label for="provincia" class="form-label">Provincia</label>
+            <select id="provincia" formControlName="provincia" class="form-select">
+              <option value="">Todas</option>
+              <option *ngFor="let p of provinciasDisponibles" [value]="p">{{ p }}</option>
+            </select>
+          </div>
+
+          <hr class="separador" />
+
+          <!-- Filtros Matching -->
+          <h2 class="titulo-filtros mt-4">Filtros de compatibilidad</h2>
+
+          <!-- Estilo de vida -->
+          <div class="mb-3">
+            <label for="estiloVida" class="form-label">Estilo de vida</label>
+            <select id="estiloVida" formControlName="estiloVida" class="form-select">
+              <option value="">-- Selecciona --</option>
+              <option value="Muy activo">Muy activo</option>
+              <option value="Normal">Normal</option>
+              <option value="Poco activo">Poco activo</option>
+            </select>
+          </div>
+
+          <!-- Niños / Mayores -->
+          <div class="mb-3">
+            <label for="niniosYadultos" class="form-label">
+              ¿Convives con niños o personas de edad avanzada?
+            </label>
+            <select id="niniosYadultos" formControlName="niniosYadultos" class="form-select">
+              <option value="">-- Selecciona --</option>
+              <option value="Si">Sí</option>
+              <option value="No">No</option>
+            </select>
+          </div>
+
+          <!-- Otras Mascotas -->
+          <div class="mb-3">
+            <label for="otrasMascotas" class="form-label">
+              ¿Tienes alguna otra mascota en tu vivienda?
+            </label>
+            <select id="otrasMascotas" formControlName="otrasMascotas" class="form-select">
+              <option value="">-- Selecciona --</option>
+              <option value="Si">Sí</option>
+              <option value="No">No</option>
+            </select>
+          </div>
+
+          <!-- Botones de acción -->
+          <div class="d-grid gap-2 mt-3">
+            <button type="button" class="btn btn-outline-secondary" (click)="clearFilters()">
+              Limpiar filtros
+            </button>
+          </div>
+        </form>
+      </aside>
+
+      <main class="col-12 col-md-8 col-lg-9 main-content">
+        <div class="row gy-4 gx-3">
+          <ng-container *ngFor="let animal of animales">
+            <div class="col-12 col-sm-6 col-lg-4">
+              <div class="card animal-card h-100">
+                <!-- Imagen / carrusel -->
+                <div class="ratio ratio-4x3">
+                  <ng-container *ngIf="numFotos(animal) > 1; else singleImage">
+                    <div id="carousel-{{ animal.id }}" class="carousel slide h-100" data-bs-ride="carousel">
+                      <div class="carousel-inner h-100">
+                        <div *ngFor="let foto of animal.fotoUrls; let idx = index" class="carousel-item h-100"
+                          [class.active]="idx === 0">
+                          <img [src]="foto.url || foto" class="d-block w-100 h-100 object-fit-cover"
+                            [alt]="animal.nombre + ' imagen ' + (idx + 1)" />
+                        </div>
+                      </div>
+                      <button class="carousel-control-prev" type="button"
+                        [attr.data-bs-target]="'#carousel-' + animal.id" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon"></span>
+                      </button>
+                      <button class="carousel-control-next" type="button"
+                        [attr.data-bs-target]="'#carousel-' + animal.id" data-bs-slide="next">
+                        <span class="carousel-control-next-icon"></span>
+                      </button>
+                    </div>
+                  </ng-container>
+                  <ng-template #singleImage>
+                    <img [src]="getAnimalImage(animal)" [alt]="animal.nombre" class="card-img-top object-fit-cover" />
+                  </ng-template>
+                </div>
+
+                <!-- Cuerpo de la tarjeta -->
+                <div class="card-body d-flex flex-column">
+                  <h5 class="card-title">{{ animal.nombre }}</h5>
+                  <div class="card-text mb-2">
+                    <p><strong>Especie:</strong> {{ animal.especie | titlecase }}</p>
+                    <p><strong>Sexo:</strong> {{ animal.sexo }}</p>
+                    <p><strong>Edad:</strong> {{ calcularEdad(animal.fechaNacimiento) }}</p>
+                    <p><strong>Tamaño:</strong> {{ animal.tamano }}</p>
+                    <p>
+                      <strong>Ubicación:</strong> {{ animal.comunidadAutonoma }}, {{ animal.provincia }}
+                    </p>
+                  </div>
+                  <div class="mt-auto btn-group-vertical w-100 gap-2">
+                    <button class="btn btn-outline-primary w-100" (click)="openDetails(animal)">
+                      Ver detalles
+                    </button>
+                    <button class="btn btn-success w-100" (click)="goToAdoption(animal)">
+                      ¡Adóptame!
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </ng-container>
+
+          <!-- Mensaje si no hay animales -->
+          <p *ngIf="!animales?.length" class="text-center text-muted mt-4">
+            No hay animales que mostrar.
+          </p>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- ============ MODAL DE DETALLES ============ -->
+  <div class="modal-backdrop fade show" *ngIf="showModal"></div>
+  <div class="modal fade show d-block" tabindex="-1" role="dialog" *ngIf="showModal">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Detalles de {{ selectedAnimal?.nombre }}</h5>
+          <button type="button" class="btn-close" aria-label="Cerrar" (click)="closeModal()"></button>
+        </div>
+        <div class="modal-body" *ngIf="selectedAnimal">
+          <!-- Carrusel dentro del modal -->
+          <ng-container *ngIf="numFotos(selectedAnimal) > 1; else singleModalImage">
+            <div id="carousel-modal-{{ selectedAnimal.id }}" class="carousel slide mb-3" data-bs-interval="false">
+              <div class="carousel-inner">
+                <div *ngFor="let foto of selectedAnimal.fotoUrls; let idx = index" class="carousel-item"
+                  [class.active]="idx === 0">
+                  <img [src]="foto.url" class="d-block w-100 rounded"
+                    [alt]="selectedAnimal.nombre + ' imagen ' + (idx + 1)"
+                    style="object-fit: cover; max-height: 400px; cursor: zoom-in;"
+                    (click)="openFullscreenImage(foto.url)" />
+                </div>
+              </div>
+              <button class="carousel-control-prev" type="button"
+                [attr.data-bs-target]="'#carousel-modal-' + selectedAnimal.id" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon"></span>
+              </button>
+              <button class="carousel-control-next" type="button"
+                [attr.data-bs-target]="'#carousel-modal-' + selectedAnimal.id" data-bs-slide="next">
+                <span class="carousel-control-next-icon"></span>
+              </button>
+            </div>
+          </ng-container>
+          <ng-template #singleModalImage>
+            <img [src]="getAnimalImage(selectedAnimal)" alt="{{ selectedAnimal.nombre }}" class="img-fluid mb-3 rounded"
+              style="object-fit: cover; max-height: 400px; cursor: zoom-in;"
+              (click)="openFullscreenImage(getAnimalImage(selectedAnimal))" />
+          </ng-template>
+
+          <!-- Detalles adicionales -->
+          <p><strong>Especie:</strong> {{ selectedAnimal.especie | titlecase }}</p>
+          <p><strong>Sexo:</strong> {{ selectedAnimal.sexo }}</p>
+          <p><strong>Edad:</strong> {{ calcularEdad(selectedAnimal.fechaNacimiento) }}</p>
+          <p><strong>Tamaño:</strong> {{ selectedAnimal.tamano }}</p>
+          <p><strong>Ubicación:</strong> {{ selectedAnimal.comunidadAutonoma }}, {{
+            selectedAnimal.provincia
+            }}</p>
+          <p><strong>Estilo de vida:</strong> {{ selectedAnimal.estiloVida }}</p>
+          <p>
+            <strong>Con otras mascotas:</strong> {{ selectedAnimal.otrasMascotas ? 'Sí' : 'No' }}
+          </p>
+          <p>
+            <strong>Convive con niños/personas mayores:</strong>
+            {{ selectedAnimal.niniosYadultos ? 'Sí' : 'No' }}
+          </p>
+
+          <hr />
+
+          <h6 class="mt-3">Descripción</h6>
+          <p>{{ selectedAnimal.descripcion }}</p>
+
+          <hr />
+
+          <h6 class="mt-3">Protectora</h6>
+          <p>{{ protectoraNombre }}</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="closeModal()">
+            Cerrar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ MODAL “FULLSCREEN” PARA IMAGEN AMPLIADA ============ -->
+  <div class="modal-backdrop fade show" *ngIf="fullscreenModalVisible"></div>
+  <div class="modal fade show d-block" tabindex="-1" role="dialog" *ngIf="fullscreenModalVisible"
+    style="background: rgba(0,0,0,0.8);">
+    <div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 90vw; width: auto;">
+      <div class="modal-content bg-transparent border-0">
+        <div class="modal-body p-0 position-relative">
+          <button type="button" class="btn-close btn-close-white position-absolute" aria-label="Cerrar"
+            style="top: 0.5rem; right: 0.5rem; z-index: 10;" (click)="closeFullscreenModal()"></button>
+          <img [src]="fullscreenImageUrl" class="img-fluid d-block mx-auto"
+            style="max-height: 90vh; object-fit: contain;" alt="Imagen ampliada" />
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

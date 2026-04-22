@@ -1,0 +1,35 @@
+$primary-color: #ff6b6b;
+$secondary-color: #333;
+$bg-light: #f9edea;
+
+.logo-img {
+  max-height: 60px;   
+  width: auto;        
+  display: block;     
+  border-radius: 1rem;
+  box-shadow: 0 2px 10px rgba(255, 107, 107, 0.10);
+  background: #fff;
+  padding: 0.25rem;
+}
+
+nav.navbar {
+  background-color: #f9edea !important;
+  border-bottom: 2px solid #000;         
+}
+
+nav.navbar {
+  background-color: #f9edea !important;
+  border: 2px solid #000;
+}
+
+.brand-text {
+  font-family: 'Poppins', sans-serif;    
+  font-size: 1.5rem;                     
+  font-weight: 600;                      
+  color: $secondary-color;
+  line-height: 1;                        
+  white-space: nowrap;                   
+}
+
+
+

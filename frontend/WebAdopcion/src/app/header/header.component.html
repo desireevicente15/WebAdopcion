@@ -1,0 +1,56 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+  <div class="container">
+    <a class="navbar-brand d-flex align-items-center" href="#">
+      <img src="/logoHuellasConectadas.png" alt="Huellas Conectadas logo" class="logo-img" />
+      <span class="brand-text ms-2">Huellas Conectadas</span>
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto align-items-center">
+        <li class="nav-item">
+          <a class="btn nav-link ms-3" routerLink="/">Inicio</a>
+        </li>
+
+        <ng-container *ngIf="!isLoggedIn; else loggedTemplate">
+          <li class="nav-item">
+            <a class="btn nav-link ms-3" (click)="goInicioSesion()">Inicio Sesión</a>
+          </li>
+          <li class="nav-item">
+            <a class="btn nav-link ms-3" (click)="goRegister()">¿Eres una protectora? Regístrate</a>
+          </li>
+        </ng-container>
+
+        <ng-template #loggedTemplate>
+          <li class="nav-item dropdown ms-3">
+            <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="profileDropdown" role="button"
+              data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="bi bi-person-circle fs-4 me-1"></i>
+              <!-- Si tenemos protectoraNombre mostramos ese texto, si no, 'Usuario' -->
+              <span>{{ protectoraNombre || 'Usuario' }}</span>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
+              <!-- Mostrar "Mi perfil" sólo si es protectora -->
+              <li *ngIf="protectoraId">
+                <a class="btn dropdown-item" (click)="goProtectora()">Mi perfil</a>
+              </li>
+              <!-- Si no es protectora podrías añadir otro enlace a su perfil de usuario -->
+              <li *ngIf="!protectoraId">
+                <a class="btn dropdown-item" routerLink="/perfil-usuario">Mi perfil</a>
+              </li>
+              <li>
+                <hr class="dropdown-divider" />
+              </li>
+              <li>
+                <a class="btn dropdown-item text-danger" (click)="logout()">Cerrar sesión</a>
+              </li>
+            </ul>
+          </li>
+        </ng-template>
+
+      </ul>
+    </div>
+  </div>
+</nav>

@@ -1,0 +1,55 @@
+<div class="container-fluid auth-bg-shelter">
+  <div class="row justify-content-center align-items-center min-vh-100">
+    <div class="col-12 col-sm-10 col-md-8 col-lg-5">
+      <div class="card auth-card p-4">
+
+        <div class="card-header">
+          <h2 class="shelter-title">Recuperar Contraseña</h2>
+          <p class="shelter-tagline">Introduce tu correo y te enviaremos un enlace</p>
+        </div>
+
+        <p *ngIf="infoMessage"
+           class="alert alert-success"
+           role="alert"
+           aria-live="polite">
+          {{ infoMessage }}
+        </p>
+        <p *ngIf="errorMessage"
+           class="alert alert-danger"
+           role="alert"
+           aria-live="polite">
+          {{ errorMessage }}
+        </p>
+
+        <form [formGroup]="form" (ngSubmit)="onRecover()" novalidate>
+          <div class="mb-3 form-group">
+            <label for="email" class="form-label">Correo electrónico</label>
+            <input id="email"
+                   type="email"
+                   formControlName="email"
+                   class="form-control"
+                   placeholder="protectora@correo.com"
+                   [class.is-invalid]="form.get('email')?.invalid && form.get('email')?.touched"
+                   aria-describedby="emailHelp" />
+            <div id="emailHelp" class="invalid-feedback">
+              Introduce un e-mail válido.
+            </div>
+          </div>
+
+          <div class="d-grid mt-4">
+            <button type="submit"
+                    class="btn btn-primary btn-auth"
+                    [disabled]="form.invalid || loading">
+              <span *ngIf="loading" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+              Enviar enlace
+            </button>
+          </div>
+        </form>
+
+        <div class="mt-3 text-center">
+          <a class="btn link-secondary" (click)="goLogin()">&larr; Volver al login</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

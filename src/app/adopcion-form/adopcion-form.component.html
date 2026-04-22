@@ -1,0 +1,91 @@
+<div class="adoption-form-wrapper">
+
+  <div class="form-sidebar">
+    <div class="sidebar-header">
+      <h1><strong>{{ animal?.nombre }}</strong></h1>
+    </div>
+    <div class="sidebar-image-container">
+      <ng-container *ngIf="animal; else placeholderSidebar">
+        <img [src]="animal.fotoUrl || animal.fotoUrls?.[0]?.url" [alt]="animal?.nombre" class="sidebar-image" />
+      </ng-container>
+      <ng-template #placeholderSidebar>
+        <div class="sidebar-image placeholder"></div>
+      </ng-template>
+    </div>
+
+  </div>
+
+  <div class="form-content">
+    <div class="form-header">
+      <h1 class="form-main-title">¡Yay, adopta a tu compañero!</h1>
+      <p class="form-subtitle">
+        Rellena estos datos para solicitar la adopción de
+        <strong>{{ animal?.nombre }}</strong>
+      </p>
+    </div>
+
+    <div *ngIf="!animal; else showForm" class="loading-container">
+      <p>Cargando información del animal...</p>
+    </div>
+
+    <ng-template #showForm>
+      <form [formGroup]="adoptionForm" (ngSubmit)="onSubmit()" class="adoption-form">
+
+        <div class="form-group">
+          <label for="nombreCompleto" class="form-label">Nombre y apellidos *</label>
+          <input id="nombreCompleto" type="text" class="form-control" formControlName="nombreCompleto" required />
+          <div *ngIf="
+              adoptionForm.get('nombreCompleto')?.touched &&
+              adoptionForm.get('nombreCompleto')?.invalid
+            " class="form-error">
+            El nombre es obligatorio.
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="correo" class="form-label">Correo electrónico *</label>
+          <input id="correo" type="email" class="form-control" formControlName="correo" required />
+          <div *ngIf="
+              adoptionForm.get('correo')?.touched &&
+              adoptionForm.get('correo')?.invalid
+            " class="form-error">
+            Introduce un correo válido.
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="telefono" class="form-label">Número de teléfono *</label>
+          <input id="telefono" type="tel" class="form-control" formControlName="telefono" required />
+          <div *ngIf="
+              adoptionForm.get('telefono')?.touched &&
+              adoptionForm.get('telefono')?.invalid
+            " class="form-error">
+            El teléfono es obligatorio.
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="mensaje" class="form-label">Mensaje (opcional)</label>
+          <textarea id="mensaje" rows="4" class="form-control" formControlName="mensaje"
+            placeholder="Escribe aquí tus comentarios..."></textarea>
+        </div>
+
+        <div class="form-buttons">
+          <button type="submit" class="btn btn-primary btn-submit" [disabled]="adoptionForm.invalid || loading">
+            {{ loading ? 'Enviando...' : 'Enviar solicitud' }}
+          </button>
+          <button type="button" class="btn btn-secondary btn-cancel" (click)="cancel()">
+            Cancelar
+          </button>
+        </div>
+
+        <div *ngIf="exito" class="alert alert-success mt-3">
+          ¡Solicitud enviada correctamente! La protectora recibirá tu petición.
+        </div>
+        <div *ngIf="error" class="alert alert-danger mt-3">
+          Ha ocurrido un error al enviar la solicitud. Por favor, inténtalo más tarde.
+        </div>
+      </form>
+    </ng-template>
+  </div>
+</div>

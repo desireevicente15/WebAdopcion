@@ -1,0 +1,119 @@
+<div class="container-fluid auth-bg">
+  <div class="row justify-content-center align-items-center min-vh-100">
+    <div class="col-12 col-md-6 col-lg-4">
+      <div class="auth-card p-4">
+        <div class="auth-logo text-center mb-3">
+          <img src="/logoHuellasConectadas.png" alt="Logo" width="62" height="62" />
+        </div>
+        <h2 class="text-center mb-1 form-title">Registro Protectora</h2>
+
+        <form [formGroup]="form" (ngSubmit)="onsubmit()">
+          <div class="mb-3">
+            <label class="form-label">Nombre de la protectora</label>
+            <input class="form-control" type="text" placeholder="Ej: Huellas Conectadas"
+              formControlName="protectoraName" />
+            <div *ngIf="form.get('protectoraName')?.invalid && form.get('protectoraName')?.touched"
+              class="text-danger small">
+              El nombre es obligatorio.
+            </div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">CIF</label>
+            <input class="form-control" type="text" placeholder="B12345678" formControlName="cif" />
+            <!-- Si está vacío (Validators.required) -->
+            <div *ngIf="form.get('cif')?.hasError('required') && form.get('cif')?.touched" class="text-danger small">
+              El CIF es obligatorio.
+            </div>
+            <!-- Si no cumple el patrón (Validators.pattern o cifFormatValidator) -->
+            <div *ngIf="form.get('cif')?.hasError('pattern') && form.get('cif')?.touched" class="text-danger small">
+              Formato de CIF inválido. Debe empezar por una letra válida, seguido de 7 dígitos.
+            </div>
+            <!-- Si usas cifFormatValidator y definiste error 'cifFormatoInvalido' -->
+            <div *ngIf="form.get('cif')?.hasError('cifFormatoInvalido') && form.get('cif')?.touched"
+              class="text-danger small">
+              Formato de CIF inválido. Debe empezar por una letra válida, seguido de 7 dígitos.
+            </div>
+          </div>
+
+          <!-- Correo electrónico -->
+          <div class="mb-3">
+            <label class="form-label">Correo electrónico</label>
+            <input class="form-control" type="email" placeholder="correo@ejemplo.com" formControlName="username" />
+            <div *ngIf="form.get('username')?.invalid && form.get('username')?.touched" class="text-danger small">
+              Introduce un e-mail válido.
+            </div>
+          </div>
+
+          <!-- Contraseña -->
+          <div class="mb-3">
+            <label class="form-label">Contraseña</label>
+            <input class="form-control" type="password" placeholder="*****" formControlName="password" />
+            <div *ngIf="form.get('password')?.invalid && form.get('password')?.touched" class="text-danger small">
+              La contraseña es obligatoria.
+            </div>
+          </div>
+
+          <!-- Repite contraseña -->
+          <div class="mb-3">
+            <label class="form-label">Repite contraseña</label>
+            <input class="form-control" type="password" placeholder="*****" formControlName="repeatPassword" />
+            <div *ngIf="form.get('repeatPassword')?.invalid && form.get('repeatPassword')?.touched"
+              class="text-danger small">
+              Debes repetir la contraseña.
+            </div>
+          </div>
+
+          <!-- Descripción -->
+          <div class="mb-3">
+            <label class="form-label">Descripción</label>
+            <textarea class="form-control" rows="3" placeholder="Breve descripción de la protectora"
+              formControlName="descripcion"></textarea>
+            <div *ngIf="form.get('descripcion')?.invalid && form.get('descripcion')?.touched" class="text-danger small">
+              La descripción es obligatoria.
+            </div>
+          </div>
+
+          <!-- Comunidad Autónoma (select) -->
+          <div class="mb-3">
+            <label class="form-label">Comunidad Autónoma</label>
+            <select class="form-select" formControlName="comunidadAutonoma">
+              <option value="" disabled>Selecciona...</option>
+              <option *ngFor="let ca of comunidadesAutonomas" [value]="ca.nombre">
+                {{ ca.nombre }}
+              </option>
+            </select>
+            <div *ngIf="form.get('comunidadAutonoma')?.invalid && form.get('comunidadAutonoma')?.touched"
+              class="text-danger small">
+              La Comunidad Autónoma es obligatoria.
+            </div>
+          </div>
+
+          <!-- Provincia (select, dependiente) -->
+          <div class="mb-3">
+            <label class="form-label">Provincia</label>
+            <select class="form-select" formControlName="provincia" [disabled]="provinciasDisponibles.length === 0">
+              <option value="" disabled>Selecciona...</option>
+              <option *ngFor="let p of provinciasDisponibles" [value]="p">
+                {{ p }}
+              </option>
+            </select>
+            <div *ngIf="form.get('provincia')?.invalid && form.get('provincia')?.touched" class="text-danger small">
+              La provincia es obligatoria.
+            </div>
+          </div>
+
+          <!-- Dirección -->
+          <div class="mb-4">
+            <label class="form-label">Dirección</label>
+            <input class="form-control" type="text" placeholder="Calle Falsa 123" formControlName="address" />
+            <div *ngIf="form.get('address')?.invalid && form.get('address')?.touched" class="text-danger small">
+              La dirección es obligatoria.
+            </div>
+          </div>
+
+          <button type="submit" class="btn-auth w-100">Finalizar registro</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

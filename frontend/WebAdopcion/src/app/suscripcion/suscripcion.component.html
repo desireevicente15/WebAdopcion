@@ -1,0 +1,99 @@
+<!-- src/app/suscripcion/suscripcion.component.html -->
+
+<!-- Si paymentSuccess === false, mostramos el formulario de pago -->
+<ng-container *ngIf="!paymentSuccess; else exitoTemplate">
+  <div class="pago-container">
+    <div class="pago-info-izquierda">
+      <h2>Importe: <span class="importe">15,00 €</span></h2>
+      <p class="titulo-suscripcion">Suscripción Mensual</p>
+
+      <div class="info-item">
+        <i class="bi bi-building fs-5"></i>
+        <span>Comercio: Huellas Conectadas</span>
+      </div>
+
+      <div class="info-item">
+        <i class="bi bi-clock fs-5"></i>
+        <span>Fecha: {{ hoy | date:'dd/MM/yyyy HH:mm' }}</span>
+      </div>
+      <div class="info-item">
+        <i class="bi bi-file-earmark-text fs-5"></i>
+        <span>Descripción: Suscripción Mensual</span>
+      </div>
+
+      <div class="tarjetas-soportadas">
+        <img src="/visa.png" alt="visa" />
+        <img src="/mastercard.png" alt="MasterCard" />
+      </div>
+    </div>
+
+    <div class="pago-form-derecha">
+      <h3>Pagar con Tarjeta</h3>
+      <form [formGroup]="formaPago" (ngSubmit)="simularPago()">
+
+        <!-- Nº Tarjeta -->
+        <label for="numeroTarjeta">
+          Nº Tarjeta <i class="bi bi-credit-card"></i>
+        </label>
+        <input id="numeroTarjeta" type="text" placeholder="4242 4242 4242 4242" formControlName="numeroTarjeta" />
+        <div *ngIf="numeroTarjeta?.touched && numeroTarjeta?.invalid" class="text-danger small">
+          <div *ngIf="numeroTarjeta?.hasError('required')">
+            El número de tarjeta es obligatorio.
+          </div>
+          <div *ngIf="numeroTarjeta?.hasError('pattern')">
+            Debe tener entre 16 y 19 dígitos.
+          </div>
+        </div>
+
+        <!-- Caducidad -->
+        <label for="caducidad">
+          Caducidad <i class="bi bi-calendar-date"></i>
+        </label>
+        <!-- Cambiamos a input type="month" -->
+        <input id="caducidad" type="month" formControlName="caducidad" class="form-control" />
+        <div *ngIf="caducidad?.touched && caducidad?.invalid" class="text-danger small">
+          <div *ngIf="caducidad?.hasError('required')">
+            La fecha de caducidad es obligatoria.
+          </div>
+          <div *ngIf="caducidad?.hasError('fechaCaducidadInvalida')">
+            La caducidad no puede ser anterior al mes actual.
+          </div>
+        </div>
+
+        <!-- CVC -->
+        <label for="cvc">
+          Cód. Seguridad <i class="bi bi-lock"></i>
+        </label>
+        <input id="cvc" type="text" placeholder="123" formControlName="cvc" />
+        <div *ngIf="cvc?.touched && cvc?.invalid" class="text-danger small">
+          <div *ngIf="cvc?.hasError('required')">
+            El CVC es obligatorio.
+          </div>
+          <div *ngIf="cvc?.hasError('pattern')">
+            Debe tener 3 o 4 dígitos.
+          </div>
+        </div>
+
+        <div class="botones">
+          <button type="button" class="btn-cancelar" (click)="cancelarPago()">
+            Cancelar
+          </button>
+          <button type="submit" class="btn-pagar">
+            Pagar
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</ng-container>
+
+<!-- Bloque de ÉXITO: solo se muestra cuando paymentSuccess === true -->
+<ng-template #exitoTemplate>
+  <div class="exito-container">
+    <h2><i class="bi bi-check-circle-fill fs-3"></i> ¡Pago exitoso!</h2>
+    <p>
+      Tu suscripción se ha activado correctamente.
+      Serás dirigido al inicio de sesión en unos segundos.
+    </p>
+  </div>
+</ng-template>

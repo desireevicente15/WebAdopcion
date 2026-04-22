@@ -1,0 +1,129 @@
+<form [formGroup]="form" class="form-container animal-form" (ngSubmit)="guardarAnimal()">
+  <h3 class="form-title">
+    <span class="icon-paw">🐾</span>
+    Añadir Animal
+  </h3>
+
+  <div class="form-row">
+    <label for="tipo">Tipo de animal</label>
+    <select id="tipo" formControlName="tipo">
+      <option value="" disabled>Selecciona...</option>
+      <option *ngFor="let t of tipos" [value]="t">{{ t | titlecase }}</option>
+    </select>
+  </div>
+
+  <div class="form-row">
+    <label for="nombre">Nombre</label>
+    <input id="nombre" type="text" formControlName="nombre" placeholder="Ej: Luna, Max..." />
+  </div>
+
+  <div class="form-row doble">
+    <div>
+      <label for="comunidad">Comunidad Autónoma</label>
+      <select id="comunidad" formControlName="comunidadAutonoma">
+        <option value="" disabled>Selecciona...</option>
+        <option *ngFor="let ca of comunidadesAutonomas" [value]="ca.nombre">{{ ca.nombre }}</option>
+      </select>
+    </div>
+    <div>
+      <label for="provincia">Provincia</label>
+      <select id="provincia" formControlName="provincia">
+        <option value="" disabled>Selecciona...</option>
+        <option *ngFor="let p of provincias" [value]="p">{{ p }}</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="form-row">
+    <label for="sexo">Sexo</label>
+    <select id="sexo" formControlName="sexo">
+      <option value="" disabled>Selecciona...</option>
+      <option *ngFor="let s of sexos" [value]="s">{{ s | titlecase }}</option>
+    </select>
+  </div>
+
+  <div class="form-row">
+    <label for="tamano">Tamaño</label>
+    <select id="tamano" formControlName="tamano">
+      <option value="" disabled>Selecciona...</option>
+      <option *ngFor="let t of tamanos" [value]="t">{{ t | titlecase }}</option>
+    </select>
+  </div>
+
+  <div class="form-row">
+    <label for="fechaNacimiento">Fecha de nacimiento</label>
+    <input id="fechaNacimiento" type="date" formControlName="fechaNacimiento" />
+  </div>
+
+  <div class="form-row">
+    <label for="estiloVida">Estilo de vida</label>
+    <select id="estiloVida" formControlName="estiloVida">
+      <option value="" disabled>Selecciona...</option>
+      <option *ngFor="let e of estilosVida" [value]="e">{{ e | titlecase }}</option>
+    </select>
+  </div>
+
+  <div class="form-row checkboxes">
+    <label>
+      <input type="checkbox" formControlName="conOtrasMascotas" />
+      Compatible con otras mascotas
+    </label>
+    <label>
+      <input type="checkbox" formControlName="conNiniosYoMayores" />
+      Compatible con niños/personas mayores
+    </label>
+  </div>
+
+  <div class="mb-3">
+    <label for="descripcion" class="form-label">Descripción</label>
+    <textarea id="descripcion" class="form-control" formControlName="descripcion" rows="3"
+      placeholder="Escribe aquí una breve descripción del animal..."></textarea>
+  </div>
+
+  <div class="mb-3">
+    <label for="fotos" class="form-label">Imágenes del animal</label>
+    <input
+      id="fotos"
+      type="file"
+      multiple
+      class="form-control"
+      (change)="onFilesSelected($event)"
+      [disabled]="uploading"
+      accept="image/*"
+    />
+    <div *ngIf="uploading" class="small text-primary mt-1">
+      <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+      Subiendo imágenes...
+    </div>
+
+    <div class="mt-2 d-flex flex-wrap">
+      <div
+        *ngFor="let foto of fotosSeleccionadas; let idx = index"
+        class="me-2 mb-2 position-relative"
+      >
+        <img
+          [src]="foto.url"
+          class="rounded"
+          style="width: 60px; height: 60px; object-fit: cover;"
+          [alt]="'Foto ' + (idx + 1)"
+        />
+        <button
+          type="button"
+          class="btn-close btn-sm position-absolute top-0 end-0 bg-white"
+          aria-label="Eliminar"
+          (click)="removeSelectedImage(idx)"
+        ></button>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-actions">
+    <button id="guardarAnimal" type="submit" class="btn-main" [disabled]="uploading">
+      Guardar Animal
+    </button>
+    <button id="atrasAnimal" type="button" (click)="goBack()" class="btn-secondary">
+      Atrás
+    </button>
+  </div>
+</form>
+

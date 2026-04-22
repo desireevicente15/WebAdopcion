@@ -1,0 +1,102 @@
+@import '../../styles/variables';
+$primary-color: #ff6b6b;
+
+.filtros-page {
+  background-color: $bg-light;
+
+  .titulo-filtros {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    color: $primary-color;
+    text-align: center;
+    margin-bottom: 1rem;
+  }
+
+  .sidebar-filters {
+    background: lighten($primary-color, 45%);
+    border: 1px solid $primary-color;
+    border-radius: 8px;
+
+    .filters-container {
+      label {
+        font-weight: 500;
+        color: $secondary-color;
+      }
+
+      select {
+        margin-top: 0.25rem;
+        border: 1px solid darken($primary-color, 20%);
+      }
+
+      button {
+        &.btn-primary {
+          background-color: $primary-color;
+          border-color: $primary-color;
+        }
+
+
+        &.btn-outline-secondary {
+          border-color: $primary-color;
+          color: $primary-color;
+
+          &:hover {
+            background-color: $primary-color;
+            color: #fff;
+          }
+        }
+      }
+    }
+
+    hr.separador {
+      border-top: 2px solid $primary-color;
+      margin: 1.5rem 0;
+    }
+  }
+
+  .main-content {
+    .animal-card {
+      border: none;
+      border-radius: 0.75rem;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      overflow: hidden;
+
+      .ratio {
+        background-color: #f0f0f0;
+      }
+
+      .card-body {
+        display: flex;
+        flex-direction: column;
+        padding: 1rem;
+
+        .card-title {
+          font-family: 'Poppins', sans-serif;
+          font-weight: 700;
+          color: $secondary-color;
+        }
+
+        .card-text {
+          font-size: 0.875rem;
+          color: darken($secondary-color, 10%);
+        }
+
+        button.btn-outline-primary {
+          border-color: $primary-color;
+          color: $primary-color;
+          font-size: 0.85rem;
+
+          &:hover {
+            background-color: $primary-color;
+            color: #fff;
+          }
+        }
+      }
+    }
+  }
+
+  img[style*="cursor: zoom-in"] {
+    cursor: zoom-in;
+  }
+
+
+}
