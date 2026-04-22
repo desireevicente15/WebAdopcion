@@ -1,4 +1,3 @@
-// src/app/header/header.component.ts
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
@@ -36,23 +35,19 @@ export class HeaderComponent implements OnInit {
 
     onAuthStateChanged(this.auth, (user: User | null) => {
       if (user && user.emailVerified) {
-        // 1) Hay usuario autenticado y verificado
         this.isLoggedIn = true;
 
-        // 2) Intentamos cargar su dato de Protectora (si existe)
         this.ps.getProtectoraByEmail(user.email!).subscribe({
           next: protectoraObj => {
             this.protectoraId = protectoraObj.id;
             this.protectoraNombre = protectoraObj.nombre;
           },
-          error: err => {
-            // No es una protectora (o fallo de fetch)
+          error: () => {
             this.protectoraId = null;
             this.protectoraNombre = null;
           }
         });
       } else {
-        // No hay usuario -> volvemos al estado "no logeado"
         this.isLoggedIn = false;
         this.protectoraId = null;
         this.protectoraNombre = null;
@@ -78,9 +73,7 @@ export class HeaderComponent implements OnInit {
   async logout(): Promise<void> {
     try {
       await signOut(this.auth);
-    } catch (err) {
-      console.error('Error cerrando sesión:', err);
-    }
+    } catch {}
     this.isLoggedIn = false;
     this.protectoraId = null;
     this.protectoraNombre = null;

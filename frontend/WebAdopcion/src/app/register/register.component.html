@@ -20,22 +20,18 @@
           <div class="mb-3">
             <label class="form-label">CIF</label>
             <input class="form-control" type="text" placeholder="B12345678" formControlName="cif" />
-            <!-- Si está vacío (Validators.required) -->
             <div *ngIf="form.get('cif')?.hasError('required') && form.get('cif')?.touched" class="text-danger small">
               El CIF es obligatorio.
             </div>
-            <!-- Si no cumple el patrón (Validators.pattern o cifFormatValidator) -->
             <div *ngIf="form.get('cif')?.hasError('pattern') && form.get('cif')?.touched" class="text-danger small">
               Formato de CIF inválido. Debe empezar por una letra válida, seguido de 7 dígitos.
             </div>
-            <!-- Si usas cifFormatValidator y definiste error 'cifFormatoInvalido' -->
             <div *ngIf="form.get('cif')?.hasError('cifFormatoInvalido') && form.get('cif')?.touched"
               class="text-danger small">
               Formato de CIF inválido. Debe empezar por una letra válida, seguido de 7 dígitos.
             </div>
           </div>
 
-          <!-- Correo electrónico -->
           <div class="mb-3">
             <label class="form-label">Correo electrónico</label>
             <input class="form-control" type="email" placeholder="correo@ejemplo.com" formControlName="username" />
@@ -44,7 +40,6 @@
             </div>
           </div>
 
-          <!-- Contraseña -->
           <div class="mb-3">
             <label class="form-label">Contraseña</label>
             <input class="form-control" type="password" placeholder="*****" formControlName="password" />
@@ -53,7 +48,6 @@
             </div>
           </div>
 
-          <!-- Repite contraseña -->
           <div class="mb-3">
             <label class="form-label">Repite contraseña</label>
             <input class="form-control" type="password" placeholder="*****" formControlName="repeatPassword" />
@@ -63,7 +57,6 @@
             </div>
           </div>
 
-          <!-- Descripción -->
           <div class="mb-3">
             <label class="form-label">Descripción</label>
             <textarea class="form-control" rows="3" placeholder="Breve descripción de la protectora"
@@ -73,7 +66,6 @@
             </div>
           </div>
 
-          <!-- Comunidad Autónoma (select) -->
           <div class="mb-3">
             <label class="form-label">Comunidad Autónoma</label>
             <select class="form-select" formControlName="comunidadAutonoma">
@@ -88,7 +80,6 @@
             </div>
           </div>
 
-          <!-- Provincia (select, dependiente) -->
           <div class="mb-3">
             <label class="form-label">Provincia</label>
             <select class="form-select" formControlName="provincia" [disabled]="provinciasDisponibles.length === 0">
@@ -102,7 +93,6 @@
             </div>
           </div>
 
-          <!-- Dirección -->
           <div class="mb-4">
             <label class="form-label">Dirección</label>
             <input class="form-control" type="text" placeholder="Calle Falsa 123" formControlName="address" />

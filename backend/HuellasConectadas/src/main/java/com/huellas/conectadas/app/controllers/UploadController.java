@@ -21,14 +21,13 @@ public class UploadController {
     public ResponseEntity<Map<String, String>> uploadAnimalImage(
             @RequestParam("file") MultipartFile file
     ) throws Exception {
-        // Subida a Cloudinary, con carpetas y optimización automática de calidad/formato
         Map<?,?> uploadResult = cloudinary.uploader()
                 .upload(
                         file.getBytes(),
                         ObjectUtils.asMap(
                                 "folder",        "huellas/animales",
-                                "quality",       "auto",        // Auto‐optimiza calidad
-                                "fetch_format",  "auto"         // Auto‐elige mejor formato (p.ej. WebP)
+                                "quality",       "auto",
+                                "fetch_format",  "auto"
                         )
                 );
 

@@ -7,9 +7,9 @@ $primary-hover:   darken($primary-color, 10%);
 .auth-bg-shelter {
   background: linear-gradient(
     135deg,
-    $bg-light       0%,    // Rosa clarito
-    $bg-light-mid   50%,   // Rosa intermedio (–15 %)
-    $bg-light-dark  100%   // Rosa oscuro (–30 %)
+    $bg-light       0%,
+    $bg-light-mid   50%,
+    $bg-light-dark  100%
   );
 }
 

@@ -184,7 +184,7 @@ export class PerfilProtectoraComponent implements OnInit, AfterViewInit {
           this.editCache.fotoUrls!.push({ url, publicId });
           next(i + 1);
         },
-        error: () => { console.error('err'); this.uploading = false; }
+        error: () => { this.uploading = false; }
       });
     };
     next(0);
@@ -230,8 +230,7 @@ export class PerfilProtectoraComponent implements OnInit, AfterViewInit {
               confirmButtonText: 'Aceptar'
             });
             this.router.navigate(['/login']);
-          } catch (err) {
-            console.error('Error al eliminar usuario de Auth:', err);
+          } catch {
             await Swal.fire({
               icon: 'error',
               title: 'Error en autenticación',
@@ -252,8 +251,7 @@ export class PerfilProtectoraComponent implements OnInit, AfterViewInit {
           this.router.navigate(['/login']);
         }
       },
-      error: async (err) => {
-        console.error('Error al eliminar la protectora en Firestore:', err);
+      error: async () => {
         await Swal.fire({
           icon: 'error',
           title: 'Error',

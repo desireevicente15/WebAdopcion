@@ -1,4 +1,3 @@
-// src/main.ts
 
 import { bootstrapApplication } from '@angular/platform-browser';
 import { provideRouter } from '@angular/router';
@@ -17,4 +16,4 @@ bootstrapApplication(AppComponent, {
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideFirestore(() => getFirestore())
   ]
-}).catch(err => console.error(err));
+}).catch(() => {});

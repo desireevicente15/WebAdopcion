@@ -23,7 +23,6 @@ export class HomeComponent implements OnInit {
     const q = query(collection(this.firebaseService.db, 'animales'));
     const querySnapshot = await getDocs(q);
     querySnapshot.forEach((doc) => {
-      console.log(`${doc.id} => `, doc.data());
       this.animals.push(doc.data());
     });
   }

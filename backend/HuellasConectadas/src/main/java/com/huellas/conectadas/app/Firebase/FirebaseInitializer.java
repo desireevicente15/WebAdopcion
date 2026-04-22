@@ -33,7 +33,6 @@ public class FirebaseInitializer {
 
         try (InputStream serviceAccount = openServiceAccount()) {
             if (serviceAccount == null) {
-                System.out.println("Firebase Admin no se ha inicializado: no hay credenciales configuradas.");
                 return;
             }
 
@@ -45,8 +44,6 @@ public class FirebaseInitializer {
             }
 
             FirebaseApp.initializeApp(optionsBuilder.build());
-            FirebaseApp app = FirebaseApp.getInstance();
-            System.out.println("Firebase inicializado correctamente: " + app.getOptions().getProjectId());
         } catch (IOException e) {
             throw new IllegalStateException("No se pudo inicializar Firebase Admin", e);
         }

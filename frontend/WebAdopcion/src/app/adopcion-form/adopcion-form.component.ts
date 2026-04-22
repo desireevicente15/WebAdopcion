@@ -47,13 +47,6 @@ export class AdopcionFormComponent implements OnInit {
   this.protectoraId = this.route.snapshot.paramMap.get('protectoraId')!;
   this.animalId     = this.route.snapshot.paramMap.get('animalId')!;
 
-  console.log(
-    '>> AdopcionFormComponent se ha inicializado con:',
-    'protectoraId=', this.protectoraId,
-    'animalId=', this.animalId
-  );
-
-  
   this.adoptionForm = this.fb.group({
     nombreCompleto: ['', [Validators.required]],
     correo:         ['', [Validators.required, Validators.email]],
@@ -63,14 +56,12 @@ export class AdopcionFormComponent implements OnInit {
 
   this.animalService.getAnimalGlobal(this.protectoraId, this.animalId).subscribe({
     next: (a: Animal) => {
-      console.log('→ getAnimalGlobal: Ví el animal =', a);
       this.animal = a;
       this.ps.getProtectora(this.protectoraId).subscribe(protectoraData => {
         this.nombreProtectora = protectoraData.nombre || 'Desconocida';
     });
   },
-  error: (err) => {
-    console.error('→ getAnimalGlobal lanzó un error:', err);
+  error: () => {
     this.router.navigate(['/filtrar']);
   }
 });
@@ -102,8 +93,7 @@ export class AdopcionFormComponent implements OnInit {
         this.exito = true;
         this.adoptionForm.disable();
       })
-      .catch(err => {
-        console.error('Error al crear solicitud:', err);
+      .catch(() => {
         this.loading = false;
         this.error = true;
       });

@@ -1,4 +1,3 @@
-// src/app/header/header.component.ts
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
@@ -71,9 +70,7 @@ export class HeaderComponent implements OnInit {
   async logout(): Promise<void> {
     try {
       await signOut(this.auth);
-    } catch (err) {
-      console.error('Error cerrando sesión:', err);
-    }
+    } catch {}
     this.isLoggedIn = false;
     this.protectoraId = null;
     this.protectoraNombre = null;

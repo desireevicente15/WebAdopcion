@@ -1,6 +1,4 @@
-<!-- src/app/suscripcion/suscripcion.component.html -->
 
-<!-- Si paymentSuccess === false, mostramos el formulario de pago -->
 <ng-container *ngIf="!paymentSuccess; else exitoTemplate">
   <div class="pago-container">
     <div class="pago-info-izquierda">
@@ -31,7 +29,6 @@
       <h3>Pagar con Tarjeta</h3>
       <form [formGroup]="formaPago" (ngSubmit)="simularPago()">
 
-        <!-- Nº Tarjeta -->
         <label for="numeroTarjeta">
           Nº Tarjeta <i class="bi bi-credit-card"></i>
         </label>
@@ -45,11 +42,9 @@
           </div>
         </div>
 
-        <!-- Caducidad -->
         <label for="caducidad">
           Caducidad <i class="bi bi-calendar-date"></i>
         </label>
-        <!-- Cambiamos a input type="month" -->
         <input id="caducidad" type="month" formControlName="caducidad" class="form-control" />
         <div *ngIf="caducidad?.touched && caducidad?.invalid" class="text-danger small">
           <div *ngIf="caducidad?.hasError('required')">
@@ -60,7 +55,6 @@
           </div>
         </div>
 
-        <!-- CVC -->
         <label for="cvc">
           Cód. Seguridad <i class="bi bi-lock"></i>
         </label>
@@ -87,7 +81,6 @@
   </div>
 </ng-container>
 
-<!-- Bloque de ÉXITO: solo se muestra cuando paymentSuccess === true -->
 <ng-template #exitoTemplate>
   <div class="exito-container">
     <h2><i class="bi bi-check-circle-fill fs-3"></i> ¡Pago exitoso!</h2>

@@ -50,7 +50,6 @@ export class RecoverComponent implements OnInit {
       });
       this.infoMessage = 'Enlace enviado: revisa tu correo para restablecer tu contraseña.';
     } catch (err: any) {
-      console.error('Reset email error:', err);
       if (err.code === 'auth/user-not-found') {
         this.errorMessage = 'No existe ninguna cuenta con ese correo.';
       } else {

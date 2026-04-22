@@ -79,7 +79,6 @@ export class LoginComponent implements OnInit {
         .pipe(take(1))
         .subscribe({
           next: (protectoraObj) => {
-            // 1) guardamos en el AuthService
             this.authService.setProtectora({
               id: protectoraObj.id,
               nombre: protectoraObj.nombre,
@@ -91,21 +90,20 @@ export class LoginComponent implements OnInit {
               animales: protectoraObj.animales
             });
 
-            // 2) navegamos al perfil
             this.router.navigate(['/protectora', protectoraObj.id])
               .then(() => {
-                // 3) y, si es la PRIMERA vez que acaba de loguearse, recargamos la página
                 if (!sessionStorage.getItem('justReloaded')) {
                   sessionStorage.setItem('justReloaded', '1');
                   window.location.reload();
                 }
               });
           },
-          error: err => { /* tu lógica de fallo */ }
+          error: () => {
+            this.infoMessage = 'No se ha encontrado el perfil asociado a este correo.';
+          }
         });
 
     } catch (err: any) {
-      console.error('Error en login:', err);
       switch (err.code) {
         case 'auth/user-not-found':
         case 'auth/wrong-password':

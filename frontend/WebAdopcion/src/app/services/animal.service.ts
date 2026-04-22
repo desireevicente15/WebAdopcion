@@ -1,4 +1,3 @@
-// src/app/services/animal.service.ts
 
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
@@ -16,17 +15,13 @@ import {
   where
 } from '@angular/fire/firestore';
 
-/** 
- * Interfaz Foto (con publicId) 
- */
+
 export interface Foto {
   url: string;
   publicId: string;
 }
 
-/**
- * Interfaz Animal. 
- */
+
 export interface Animal {
   id?: string;
   protectoraId: string;

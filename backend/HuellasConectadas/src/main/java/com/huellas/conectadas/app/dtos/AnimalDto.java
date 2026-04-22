@@ -1,7 +1,6 @@
 package com.huellas.conectadas.app.dtos;
 
 import com.huellas.conectadas.app.models.AnimalModel;
-import com.huellas.conectadas.app.models.AnimalModel;
 
 import java.time.ZoneId;
 import java.util.*;
@@ -19,9 +18,6 @@ public class AnimalDto {
     private boolean conOtrasMascotas;
     private boolean conNiniosYoMayores;
 
-    // getters y setters...
-
-    /** Convierte este DTO en tu entidad Animal */
     public AnimalModel toEntity() {
         AnimalModel a = new AnimalModel();
         a.setId(id);
@@ -39,7 +35,6 @@ public class AnimalDto {
         return a;
     }
 
-    /** Para guardar en Firestore como Map */
     public Map<String,Object> toMap() {
         Map<String,Object> m = new HashMap<>();
         if (id != null) m.put("id", id);
@@ -56,7 +51,6 @@ public class AnimalDto {
         return m;
     }
 
-    /** Genera las etiquetas según tu lógica */
     public List<String> buildTags() {
         List<String> tags = new ArrayList<>();
         tags.add(tipo);

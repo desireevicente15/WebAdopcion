@@ -17,11 +17,8 @@ public class SecurityConfig {
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                // 1) Aplica tu CorsConfigurationSource
                 .cors(Customizer.withDefaults())
-                // 2) Deshabilita CSRF para que PUT/DELETE sin token no fallen
                 .csrf(csrf -> csrf.disable())
-                // 3) Abre todos los endpoints de /api/**
                 .authorizeHttpRequests(auth -> auth
                         .anyRequest().permitAll()
                 );
@@ -34,7 +31,6 @@ public class SecurityConfig {
         config.setAllowedOrigins(List.of("http://localhost:4200"));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
-        // no necesitas credenciales en el header
         config.setAllowCredentials(false);
 
         var source = new UrlBasedCorsConfigurationSource();

@@ -28,15 +28,12 @@
             <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="profileDropdown" role="button"
               data-bs-toggle="dropdown" aria-expanded="false">
               <i class="bi bi-person-circle fs-4 me-1"></i>
-              <!-- Si tenemos protectoraNombre mostramos ese texto, si no, 'Usuario' -->
               <span>{{ protectoraNombre || 'Usuario' }}</span>
             </a>
             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
-              <!-- Mostrar "Mi perfil" sólo si es protectora -->
               <li *ngIf="protectoraId">
                 <a class="btn dropdown-item" (click)="goProtectora()">Mi perfil</a>
               </li>
-              <!-- Si no es protectora podrías añadir otro enlace a su perfil de usuario -->
               <li *ngIf="!protectoraId">
                 <a class="btn dropdown-item" routerLink="/perfil-usuario">Mi perfil</a>
               </li>

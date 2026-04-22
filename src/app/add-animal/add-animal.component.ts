@@ -1,5 +1,3 @@
-// src/app/add-animal/add-animal.component.ts
-
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -97,7 +95,6 @@ export class AddAnimalComponent implements OnInit {
   onFilesSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
     const files = Array.from(input.files || []);
-    console.log('>> archivos seleccionados', files);
     if (files.length === 0) {
       return;
     }
@@ -116,8 +113,7 @@ export class AddAnimalComponent implements OnInit {
           this.fotosSeleccionadas.push({ url, publicId });
           subirSiguiente(index + 1);
         },
-        error: err => {
-          console.error('Error al subir imagen:', err);
+        error: () => {
           subirSiguiente(index + 1);
         }
       });
@@ -137,8 +133,7 @@ export class AddAnimalComponent implements OnInit {
       next: () => {
         this.fotosSeleccionadas.splice(idx, 1);
       },
-      error: err => {
-        console.error('Error al eliminar imagen de Cloudinary:', err);
+      error: () => {
         this.fotosSeleccionadas.splice(idx, 1);
       },
       complete: () => {
@@ -148,10 +143,6 @@ export class AddAnimalComponent implements OnInit {
 
 
   guardarAnimal(): void {
-    console.log('   → Controles:', this.form.controls);
-    Object.keys(this.form.controls).forEach(key => {
-      console.log(`      • ${key}: valid=${this.form.get(key)?.valid}, value=`, this.form.get(key)?.value);
-    });
     if (this.form.invalid) {
       this.form.markAllAsTouched();
       return;
@@ -197,7 +188,7 @@ export class AddAnimalComponent implements OnInit {
     this.ps.addAnimalAProtectora(this.idProtectora, datos)
       .subscribe({
         next: () => this.router.navigate(['/protectora', this.idProtectora]),
-        error: err => console.error(err)
+        error: () => {}
       });
   }
 

@@ -34,7 +34,6 @@ public class AnimalController {
 
         Firestore db = FirestoreClient.getFirestore();
 
-        // 1) Usamos collectionGroup para leer de todas las subcolecciones "animales"
         Query query = db.collectionGroup("animales");
 
         if (especie != null)       query = query.whereEqualTo("especie", especie);
@@ -47,7 +46,6 @@ public class AnimalController {
         if (niniosYadultos != null)  query = query.whereEqualTo("conNiniosYoMayores", Boolean.parseBoolean(niniosYadultos));
         if (otrasMascotas != null)   query = query.whereEqualTo("conOtrasMascotas", Boolean.parseBoolean(otrasMascotas));
 
-        // Edad: mismo cálculo que antes
         if (edad != null && !edad.isEmpty()) {
             LocalDate hoy = LocalDate.now(ZoneId.of("UTC"));
             LocalDate haceUnAno = hoy.minusYears(1);
@@ -62,23 +60,19 @@ public class AnimalController {
             query = query.orderBy("fechaNacimiento");
         }
 
-        // 2) Ejecutamos la query
         ApiFuture<QuerySnapshot> future = query.get();
         List<Map<String,Object>> animales = future.get().getDocuments().stream()
-                // <-- filtramos los que SÍ están bajo una colección hija de protectora
                 .filter(docSnap -> {
                     CollectionReference col = docSnap.getReference().getParent();
-                    // col.getParent() == null solo para la raíz, descartamos esos
                     return col.getParent() != null;
                 })
                 .map(docSnap -> {
                     Map<String,Object> data = new HashMap<>(docSnap.getData());
                     data.put("id", docSnap.getId());
 
-                    // ahora con total seguridad el padre es un documento de "protectoras"
                     DocumentReference protRef = docSnap.getReference()
-                            .getParent()   // colección "animales"
-                            .getParent();  // documento "protectoras/{id}"
+                            .getParent()
+                            .getParent();
                     data.put("protectoraId", protRef.getId());
                     return data;
                 })

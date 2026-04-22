@@ -7,7 +7,6 @@
 
         <form [formGroup]="filterForm" (ngSubmit)="onFilter()" class="filters-container mb-4">
 
-          <!-- Especie -->
           <div class="mb-3">
             <label for="especie" class="form-label">Especie</label>
             <select formControlName="especie" id="especie" class="form-select">
@@ -16,7 +15,6 @@
             </select>
           </div>
 
-          <!-- Sexo -->
           <div class="mb-3">
             <label for="sexo" class="form-label">Sexo</label>
             <select formControlName="sexo" id="sexo" class="form-select">
@@ -25,7 +23,6 @@
             </select>
           </div>
 
-          <!-- Edad -->
           <div class="mb-3">
             <label for="edad" class="form-label">Edad</label>
             <select formControlName="edad" id="edad" class="form-select">
@@ -34,7 +31,6 @@
             </select>
           </div>
 
-          <!-- Tamaño -->
           <div class="mb-3">
             <label for="tamano" class="form-label">Tamaño</label>
             <select formControlName="tamano" id="tamano" class="form-select">
@@ -43,7 +39,6 @@
             </select>
           </div>
 
-          <!-- Comunidad Autónoma -->
           <div class="mb-3">
             <label for="comunidadAutonoma" class="form-label">Comunidad Autónoma</label>
             <select id="comunidadAutonoma" formControlName="comunidadAutonoma"
@@ -55,7 +50,6 @@
             </select>
           </div>
 
-          <!-- Provincia -->
           <div class="mb-3">
             <label for="provincia" class="form-label">Provincia</label>
             <select id="provincia" formControlName="provincia" class="form-select">
@@ -66,10 +60,8 @@
 
           <hr class="separador" />
 
-          <!-- Filtros Matching -->
           <h2 class="titulo-filtros mt-4">Filtros de compatibilidad</h2>
 
-          <!-- Estilo de vida -->
           <div class="mb-3">
             <label for="estiloVida" class="form-label">Estilo de vida</label>
             <select id="estiloVida" formControlName="estiloVida" class="form-select">
@@ -80,7 +72,6 @@
             </select>
           </div>
 
-          <!-- Niños / Mayores -->
           <div class="mb-3">
             <label for="niniosYadultos" class="form-label">
               ¿Convives con niños o personas de edad avanzada?
@@ -92,7 +83,6 @@
             </select>
           </div>
 
-          <!-- Otras Mascotas -->
           <div class="mb-3">
             <label for="otrasMascotas" class="form-label">
               ¿Tienes alguna otra mascota en tu vivienda?
@@ -104,7 +94,6 @@
             </select>
           </div>
 
-          <!-- Botones de acción -->
           <div class="d-grid gap-2 mt-3">
             <button type="button" class="btn btn-outline-secondary" (click)="clearFilters()">
               Limpiar filtros
@@ -118,7 +107,6 @@
           <ng-container *ngFor="let animal of animales">
             <div class="col-12 col-sm-6 col-lg-4">
               <div class="card animal-card h-100">
-                <!-- Imagen / carrusel -->
                 <div class="ratio ratio-4x3">
                   <ng-container *ngIf="numFotos(animal) > 1; else singleImage">
                     <div id="carousel-{{ animal.id }}" class="carousel slide h-100" data-bs-ride="carousel">
@@ -144,7 +132,6 @@
                   </ng-template>
                 </div>
 
-                <!-- Cuerpo de la tarjeta -->
                 <div class="card-body d-flex flex-column">
                   <h5 class="card-title">{{ animal.nombre }}</h5>
                   <div class="card-text mb-2">
@@ -169,7 +156,6 @@
             </div>
           </ng-container>
 
-          <!-- Mensaje si no hay animales -->
           <p *ngIf="!animales?.length" class="text-center text-muted mt-4">
             No hay animales que mostrar.
           </p>
@@ -178,7 +164,6 @@
     </div>
   </div>
 
-  <!-- ============ MODAL DE DETALLES ============ -->
   <div class="modal-backdrop fade show" *ngIf="showModal"></div>
   <div class="modal fade show d-block" tabindex="-1" role="dialog" *ngIf="showModal">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
@@ -188,7 +173,6 @@
           <button type="button" class="btn-close" aria-label="Cerrar" (click)="closeModal()"></button>
         </div>
         <div class="modal-body" *ngIf="selectedAnimal">
-          <!-- Carrusel dentro del modal -->
           <ng-container *ngIf="numFotos(selectedAnimal) > 1; else singleModalImage">
             <div id="carousel-modal-{{ selectedAnimal.id }}" class="carousel slide mb-3" data-bs-interval="false">
               <div class="carousel-inner">
@@ -216,7 +200,6 @@
               (click)="openFullscreenImage(getAnimalImage(selectedAnimal))" />
           </ng-template>
 
-          <!-- Detalles adicionales -->
           <p><strong>Especie:</strong> {{ selectedAnimal.especie | titlecase }}</p>
           <p><strong>Sexo:</strong> {{ selectedAnimal.sexo }}</p>
           <p><strong>Edad:</strong> {{ calcularEdad(selectedAnimal.fechaNacimiento) }}</p>
@@ -252,7 +235,6 @@
     </div>
   </div>
 
-  <!-- ============ MODAL “FULLSCREEN” PARA IMAGEN AMPLIADA ============ -->
   <div class="modal-backdrop fade show" *ngIf="fullscreenModalVisible"></div>
   <div class="modal fade show d-block" tabindex="-1" role="dialog" *ngIf="fullscreenModalVisible"
     style="background: rgba(0,0,0,0.8);">

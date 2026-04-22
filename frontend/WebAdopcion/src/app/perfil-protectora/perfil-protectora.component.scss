@@ -141,7 +141,6 @@ $shadow: 0 4px 16px rgba(255, 107, 107, 0.10);
       }
     }
 
-    /* DESCRIPCIÓN */
     .animal-description {
       margin: 0.6rem 0 0.35rem;
       font-size: 0.98rem;
@@ -149,7 +148,6 @@ $shadow: 0 4px 16px rgba(255, 107, 107, 0.10);
       min-height: 48px;
     }
 
-    /* TAGS */
     .animal-tags {
       display: flex;
       flex-wrap: wrap;
@@ -159,29 +157,20 @@ $shadow: 0 4px 16px rgba(255, 107, 107, 0.10);
 
       span {
         display: inline-block;
-        /* que cada etiqueta compute su propio ancho */
         background: $primary-light;
-        /* (por ejemplo: #fff7f5) */
         color: $primary;
-        /* (por ejemplo: #ff6b6b) */
         border-radius: 0.5rem;
         padding: 0.2rem 0.6rem;
-        /* puedes ajustar top/bottom y left/right */
         font-size: 0.9rem;
         font-weight: 600;
         letter-spacing: 0.02rem;
-        /* evita que una etiqueta extra larga rompa demasiado el diseño: */
         white-space: nowrap;
-        /* que el texto interno no se divida a medias */
         text-overflow: ellipsis;
-        /* si por alguna razón el contenido es muy largo */
         max-width: 100%;
-        /* no salga de su contenedor padre */
         overflow: hidden;
       }
     }
 
-    /* BOTONES ACCIONES (Editar / Eliminar) */
     .card-actions {
       margin-top: auto;
       display: flex;
@@ -229,16 +218,13 @@ $shadow: 0 4px 16px rgba(255, 107, 107, 0.10);
   }
 }
 
-/* =========================
-   SIDEBAR: Solicitudes (columna der.)
-   ========================= */
+
 .solicitudes-sidebar {
   background: $primary-light;
   border-radius: 1.2rem;
   box-shadow: $shadow;
   padding: 1.5rem;
   margin-top: 1rem;
-  /* separa ligeramente del header en mobile */
 
   .section-title {
     font-family: 'Poppins', sans-serif;
@@ -251,7 +237,6 @@ $shadow: 0 4px 16px rgba(255, 107, 107, 0.10);
 
   .table-responsive {
     max-height: 500px;
-    /* si hay muchas solicitudes, mantén scroll */
     overflow-y: auto;
   }
 
@@ -267,7 +252,6 @@ $shadow: 0 4px 16px rgba(255, 107, 107, 0.10);
     font-size: 0.9rem;
   }
 
-  /* Para que la tabla quede más compacta en el sidebar */
   thead {
     background: lighten($primary, 35%);
 
@@ -290,9 +274,7 @@ $shadow: 0 4px 16px rgba(255, 107, 107, 0.10);
   }
 }
 
-/* =========================
-   MEDIA QUERIES (RESPONSIVO)
-   ========================= */
+
 @media (max-width: 992px) {
   .profile-header {
     flex-direction: column;
@@ -305,6 +287,5 @@ $shadow: 0 4px 16px rgba(255, 107, 107, 0.10);
 
   .solicitudes-sidebar {
     margin-top: 2rem;
-    /* en móviles, está debajo de animales */
   }
 }

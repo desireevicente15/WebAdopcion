@@ -345,6 +345,5 @@ Si tu rama principal se llama `master`, cambia `main` por `master`.
 
 ## Notas
 
-- Hay mas notas tecnicas en `documentacion/MEJORAS_PROPUESTAS.md`.
 - La carpeta principal del frontend es `frontend/WebAdopcion`.
 - Existe una copia del frontend en la raiz que conviene revisar y eliminar en una futura limpieza si se confirma que no contiene cambios distintos.

@@ -1,36 +1,27 @@
 <div class="container-fluid auth-bg-shelter">
   <div class="row justify-content-center align-items-center min-vh-100">
     <div class="col-12 col-sm-10 col-md-8 col-lg-5">
-      <!-- Contenedor relativo para posiconar avatar y “LOGIN” -->
       <div class="auth-wrapper position-relative">
 
-        <!-- CÍRCULO DEL AVATAR, ahora más arriba (top: -60px) -->
         <div class="profile-circle">
           <i class="bi bi-person-fill"></i>
         </div>
 
-        <!-- TARJETA PRINCIPAL -->
         <div class="card auth-card p-4">
-          <!-- Opcional: tu título y tagline -->
           <div class="text-center mb-3">
             <h1 class="shelter-title mt-2">Bienvenid&#64; a Huellas Conectadas</h1>
             <p class="shelter-tagline">Tu apoyo nos ayuda a cuidarles</p>
           </div>
 
-          <!-- Mensaje informativo, igual que antes -->
           <p *ngIf="infoMessage" class="alert alert-info" role="alert" aria-live="polite">
             {{ infoMessage }}
           </p>
 
           <form [formGroup]="form" (ngSubmit)="onLogin()" novalidate>
-            <!-- ------------------------------ -->
-            <!-- CAMPO EMAIL (IZQ OSCURO + DER CLARO) -->
             <div class="mb-3 form-group input-custom">
-              <!-- Zona izquierda oscura con icono -->
               <div class="input-icon">
                 <i class="bi bi-person-fill"></i>
               </div>
-              <!-- Zona derecha clara con el input -->
               <input id="email" formControlName="email" type="email" class="form-control-custom" placeholder="Email ID"
                 [class.is-invalid]="
                   form.get('email')?.invalid && form.get('email')?.touched
@@ -41,19 +32,14 @@
               Introduce un e-mail válido.
             </div>
 
-            <!-- ------------------------------ -->
-            <!-- CAMPO PASSWORD (IZQ OSCURO + DER CLARO) -->
             <div class="mb-3 form-group input-custom position-relative">
-              <!-- Zona izquierda oscura con icono de candado -->
               <div class="input-icon">
                 <i class="bi bi-lock-fill"></i>
               </div>
-              <!-- Zona derecha clara con el input de contraseña -->
               <input id="password" formControlName="password" [type]="showPassword ? 'text' : 'password'"
                 class="form-control-custom" placeholder="Password" [class.is-invalid]="
                   form.get('password')?.invalid && form.get('password')?.touched
                 " aria-describedby="pwdHelp" />
-              <!-- Botón “mostrar/ocultar” -->
               <button type="button" class="btn btn-sm btn-pass-toggle" (click)="togglePassword()" [attr.aria-label]="
                   showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'
                 ">
@@ -65,8 +51,6 @@
               La contraseña es obligatoria.
             </div>
 
-            <!-- ------------------------------ -->
-            <!-- BOTÓN DE SUBMIT -->
             <div class="d-grid mt-4">
               <button type="submit" class="btn btn-auth" [disabled]="form.invalid || loading" aria-live="polite">
                 <span *ngIf="loading" class="spinner-border spinner-border-sm me-2" role="status"
@@ -76,7 +60,6 @@
             </div>
           </form>
 
-          <!-- ENLACES “¿No tienes cuenta?” / “Olvidaste contraseña” -->
           <div class="mt-3 text-center">
             <a routerLink="/registro" class="link-secondary">¿No tienes cuenta? Regístrate</a>
             <br />
@@ -84,10 +67,8 @@
           </div>
         </div>
 
-        <!-- CONTENEDOR INFERIOR que sobresale con la palabra “LOGIN” -->
         <div class="login-tag">LOGIN</div>
       </div>
-      <!-- /.auth-wrapper -->
     </div>
   </div>
 </div>

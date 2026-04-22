@@ -1,4 +1,3 @@
-// src/app/register/register.component.ts
 import Swal from 'sweetalert2';
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -91,11 +90,9 @@ export class RegisterComponent implements OnInit {
 
   async onsubmit(): Promise<void> {
     if (this.form.invalid) {
-      console.warn('Formulario inválido');
       return;
     }
     if (this.form.value.password !== this.form.value.repeatPassword) {
-      console.warn('Las contraseñas no coinciden');
       return;
     }
 
@@ -129,7 +126,6 @@ export class RegisterComponent implements OnInit {
 
       const cred = await createUserWithEmailAndPassword(this.auth, email, pwd);
       await sendEmailVerification(cred.user);
-      console.log('Correo de verificación enviado a', email);
 
       const payload = {
         nombre: nombreProtec,
@@ -153,7 +149,6 @@ export class RegisterComponent implements OnInit {
       this.router.navigate(['/verifica-correo']);
 
     } catch (err: any) {
-      console.error('Error durante el registro:', err);
       switch (err.code) {
         case 'auth/email-already-in-use':
           await Swal.fire({

@@ -83,15 +83,13 @@ export class LoginComponent implements OnInit {
 
             this.router.navigate(['/protectora', protectoraObj.id]);
           },
-          error: (err) => {
-            console.error('No se encontró protectora para este email:', err);
-            this.auth.signOut().catch(console.error);
+          error: () => {
+            this.auth.signOut().catch(() => {});
             this.router.navigate(['/']);
           }
         });
 
     } catch (err: any) {
-      console.error('Error en login:', err);
       switch (err.code) {
         case 'auth/user-not-found':
         case 'auth/wrong-password':

@@ -1,4 +1,3 @@
-// src/app/suscripcion/suscripcion.component.ts
 
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -49,7 +48,7 @@ export class SuscripcionComponent implements OnInit {
         '',
         [
           Validators.required,
-          Validators.pattern(/^[0-9]{3,4}$/) // 3 o 4 dígitos
+          Validators.pattern(/^[0-9]{3,4}$/)
         ]
       ]
     });
@@ -105,10 +104,7 @@ export class SuscripcionComponent implements OnInit {
     if (user) {
       try {
         await deleteUser(user);
-        console.log('Usuario Auth eliminado tras cancelar pago');
-      } catch (delErr) {
-        console.error('Error eliminando usuario:', delErr);
-      }
+      } catch {}
     }
     await Swal.fire({
       icon: 'info',

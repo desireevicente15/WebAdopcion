@@ -26,7 +26,6 @@ public class ProtectoraController {
         var docRef = db.collection("protectoras").document(id);
         var snap = docRef.get().get();
 
-        System.out.println("Buscando protectora con ID=" + id + " — existe? " + snap.exists());
         if (!snap.exists()) {
             return ResponseEntity.notFound().build();
         }
@@ -49,7 +48,6 @@ public class ProtectoraController {
                         data.put("id", animalSnap.getId());
                         return data;
                     } catch (Exception e) {
-                        e.printStackTrace();
                         return Map.<String,Object>of();
                     }
                 })
@@ -96,7 +94,6 @@ public class ProtectoraController {
             @RequestBody Map<String,Object> animalUpdates) throws Exception {
         Firestore db = FirestoreClient.getFirestore();
 
-        // Subcolección
         db.collection("protectoras")
                 .document(id)
                 .collection("animales")
@@ -104,7 +101,6 @@ public class ProtectoraController {
                 .set(animalUpdates, SetOptions.merge())
                 .get();
 
-        // Colección global
         Map<String,Object> globalUpdates = new HashMap<>(animalUpdates);
         globalUpdates.put("id",           animalId);
         globalUpdates.put("protectoraId", id);
@@ -117,16 +113,12 @@ public class ProtectoraController {
         return ResponseEntity.ok().build();
     }
 
-    /**
-     * Elimina un animal de la protectora y de la colección global
-     */
     @DeleteMapping("/{id}/animales/{animalId}")
     public ResponseEntity<Void> deleteAnimal(
             @PathVariable String id,
             @PathVariable String animalId) throws Exception {
         Firestore db = FirestoreClient.getFirestore();
 
-        // 1) Eliminar en la subcolección de la protectora
         db.collection("protectoras")
                 .document(id)
                 .collection("animales")
@@ -134,7 +126,6 @@ public class ProtectoraController {
                 .delete()
                 .get();
 
-        // 2) Eliminar en la colección global
         db.collection("animales")
                 .document(animalId)
                 .delete()
@@ -155,32 +146,24 @@ public class ProtectoraController {
         return ResponseEntity.ok(ids);
     }
 
-    /**
-     * Crea una nueva protectora con ID secuencial (id_protectora_002, 003, …)
-     */
     @PostMapping
     public ResponseEntity<Void> crearProtectora(@RequestBody Map<String,Object> nuevaProtectora) throws Exception {
         Firestore db = FirestoreClient.getFirestore();
         DocumentReference counterRef = db.collection("counters").document("protectoras");
 
-        // Ejecutamos todo dentro de una transacción atómica
         db.runTransaction(tx -> {
-            // 1) Leemos el contador actual
             var snap = tx.get(counterRef).get();
             long last = snap.contains("last") ? snap.getLong("last") : 0;
 
-            // 2) Incrementamos
             long next = last + 1;
             tx.update(counterRef, "last", next);
 
-            // 3) Formateamos el nuevo ID
             String id = String.format("id_protectora_%03d", next);
 
-            // 4) Creamos la protectora con ese ID
             tx.set(db.collection("protectoras").document(id), nuevaProtectora);
 
             return null;
-        }).get();  // .get() bloquea hasta que la transacción termina
+        }).get();
 
         return ResponseEntity.ok().build();
     }
@@ -188,17 +171,12 @@ public class ProtectoraController {
     @GetMapping("/exists/nombre")
     public ResponseEntity<Map<String, Boolean>> existsByNombre(@RequestParam String nombre) throws InterruptedException, ExecutionException {
         Firestore db = FirestoreClient.getFirestore();
-        // Buscamos en la colección “protectoras” documentos donde el campo "nombre" sea igual al que nos pasan
         Query query = db.collection("protectoras").whereEqualTo("nombre", nombre);
         ApiFuture<QuerySnapshot> querySnapshot = query.get();
         boolean exists = !querySnapshot.get().isEmpty();
         return ResponseEntity.ok(Collections.singletonMap("exists", exists));
     }
 
-    /**
-     * Comprueba si existe alguna protectora con el CIF exacto proporcionado.
-     * GET /api/protectoras/exists/cif?cif=ValorCIF
-     */
     @GetMapping("/exists/cif")
     public ResponseEntity<Map<String, Boolean>> existsByCif(@RequestParam String cif) throws InterruptedException, ExecutionException {
         Firestore db = FirestoreClient.getFirestore();
@@ -208,35 +186,24 @@ public class ProtectoraController {
         return ResponseEntity.ok(Collections.singletonMap("exists", exists));
     }
 
-    /**
-     * Elimina una protectora y sus subcolecciones (animales, etc.)
-     */
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteProtectora(@PathVariable String id) throws Exception {
         Firestore db = FirestoreClient.getFirestore();
         DocumentReference protectoraRef = db.collection("protectoras").document(id);
 
-        // 1) Comprobamos que exista la protectora
         var snap = protectoraRef.get().get();
         if (!snap.exists()) {
             return ResponseEntity.notFound().build();
         }
 
-        // 2) **Eliminar todos los animales de la subcolección "animales"**
-        //    (Cada documento en protectorAs/{id}/animales)
         Iterable<DocumentReference> animalesDocs = protectoraRef
                 .collection("animales")
                 .listDocuments();
 
         for (DocumentReference animalDocRef : animalesDocs) {
-            // Eliminamos en la subcolección de la protectora
             animalDocRef.delete().get();
-
-            // opcional: si tienes colección global "animales", borra también allí
-            // por ejemplo: db.collection("animales").document(animalDocRef.getId()).delete().get();
         }
 
-        // 3) Eliminar el documento principal de la protectora
         protectoraRef.delete().get();
 
         return ResponseEntity.ok().build();
@@ -246,22 +213,17 @@ public class ProtectoraController {
     public ResponseEntity<Map<String,Object>> getProtectoraByEmail(@RequestParam String email) throws InterruptedException, ExecutionException {
         Firestore db = FirestoreClient.getFirestore();
 
-        // Hacemos un query por whereEqualTo("email", email)
         Query query = db.collection("protectoras").whereEqualTo("email", email);
         ApiFuture<QuerySnapshot> future = query.get();
         QuerySnapshot snapshot = future.get();
 
         if (snapshot.isEmpty()) {
-            // No existe ninguna protectora con ese email
             return ResponseEntity.notFound().build();
         }
 
-        // Tomamos el primer documento encontrado
         var doc = snapshot.getDocuments().get(0);
         String idProtectora = doc.getId();
         Map<String,Object> data = doc.getData();
-        // Opcionalmente puedes decidir no enviar todo el data,
-        // pero aquí lo devolvemos completo
         data.put("id", idProtectora);
 
         return ResponseEntity.ok(Collections.unmodifiableMap(data));

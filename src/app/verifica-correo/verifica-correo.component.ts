@@ -1,4 +1,3 @@
-// src/app/verifica-correo/verifica-correo.component.ts
 
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -61,8 +60,7 @@ export class VerificaCorreoComponent implements OnInit {
         sessionStorage.removeItem('registroProtectora');
         this.router.navigate(['/suscripcion']);
       },
-      error: err => {
-        console.error('Error guardando protectora en BD:', err);
+      error: () => {
         alert('Ha ocurrido un error al guardar los datos de la protectora.');
       }
     });

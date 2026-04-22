@@ -122,17 +122,14 @@ export class AnimalListComponent implements OnInit {
   onFilter(): void {
     const f = this.filterForm.value;
     this.animales = this.allAnimales
-      // Especie (case-insensitive)
       .filter(a => {
         const esp = (a.especie || '').toLowerCase();
         return !f.especie || esp === f.especie.toLowerCase();
       })
-      // Sexo (case-insensitive)
       .filter(a => {
         const sx = (a.sexo || '').toLowerCase();
         return !f.sexo || sx === f.sexo.toLowerCase();
       })
-      // Edad
       .filter(a => {
         if (!f.edad) return true;
         const partes = this.calcularEdad(a.fechaNacimiento).split(' ');
@@ -141,27 +138,22 @@ export class AnimalListComponent implements OnInit {
         const meses = uni.startsWith('mes') ? val : val * 12;
         return f.edad === 'Menos de 1 año' ? meses < 12 : meses >= 12;
       })
-      // Tamaño (case-insensitive)
       .filter(a => {
         const tm = (a.tamano || '').toLowerCase();
         return !f.tamano || tm === f.tamano.toLowerCase();
       })
-      // Comunidad Autónoma
       .filter(a => {
         const ca = (a.comunidadAutonoma || '').toLowerCase();
         return !f.comunidadAutonoma || ca === f.comunidadAutonoma.toLowerCase();
       })
-      // Provincia
       .filter(a => {
         const pr = (a.provincia || '').toLowerCase();
         return !f.provincia || pr === f.provincia.toLowerCase();
       })
-      // Estilo de vida
       .filter(a => {
         const ev = (a.estiloVida || '').toLowerCase();
         return !f.estiloVida || ev === f.estiloVida.toLowerCase();
       })
-      // Otras mascotas
       .filter(a => {
         if (!f.otrasMascotas) return true;
         const tag = f.otrasMascotas === 'Si'
@@ -169,7 +161,6 @@ export class AnimalListComponent implements OnInit {
           : '!con_otros';
         return Array.isArray(a.etiquetas) && a.etiquetas.includes(tag);
       })
-      // Niños y personas mayores
       .filter(a => {
         if (!f.niniosYadultos) return true;
         const tag = f.niniosYadultos === 'Si' ? 'con_niños' : '!con_niños';
@@ -206,8 +197,6 @@ export class AnimalListComponent implements OnInit {
   }
 
   goToAdoption(animal: Animal) {
-    console.log('Se llamó a goToAdoption con:', animal);
-    console.log('protectoraId=', animal.protectoraId, 'animal.id=', animal.id);
     this.router.navigate([
       '/adopcion',
       animal.protectoraId,
@@ -235,9 +224,7 @@ export class AnimalListComponent implements OnInit {
 
         setTimeout(() => this.initModalCarousel(), 50);
       },
-      error: err => {
-        console.error('Error al cargar animal actualizado:', err);
-      }
+      error: () => {}
     });
   }
 
